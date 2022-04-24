@@ -1,0 +1,225 @@
+'''Class Template for a singly linked list Head -> Tail convention
+Exercise Part starts at line 40'''
+
+#class for holding the data, defaults to empty node if no data is given
+class Node:
+    def __init__(self, data=None):
+        self.data = data
+        self.next = None #pointer to the next node
+
+# Class for managing the list and nodes
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.size = 0
+
+    def append(self, data):
+        node = Node(data)
+
+        if self.head == None:  # if the node is empty, the new node is the head
+            self.head = node
+        else:  # if not empty iterate through items and append new node at the end (tail)
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = node
+        self.size += 1 #always update the size to prevent costly iterations to get the size
+
+    #defining iteration function to make iterating over nodes in the list possible
+    def __iter__(self):
+        current = self.head
+        while current:
+            val = current.data
+            current = current.next
+            yield val
+
+    def get_size(self):
+        return self.size
+
+    '''
+    Exercise Part 1,2 and 3:
+    Implement the given methods below according to the requirements in the exercise sheet.
+    return the correct data types and values
+    '''
+
+    def clear(self):
+        self.head = None
+        self.size = 0
+        return
+
+    def get_data(self, data):
+        node = self.head
+        counter = 0
+        while node != None:
+            if node.data == data:
+                counter += 1
+            node = node.next
+        if counter > 1:
+            return data
+        else:
+            return False
+
+    def delete(self, data):
+        node = self.head
+        prev_node = None
+
+        while node:
+            if node.data == data:
+                if prev_node is None:
+                    self.head = node.next
+                else:
+                    prev_node.next = node.next
+            prev_node = node
+            node = node.next
+        self.size -= 1
+        return
+
+
+
+    # Exercise Part 4: Copy the code from the singly linked list implementation and rewrite it
+    #to implement a doubly linked list according to the exercise sheet. Dont forget to change the names of the classes
+    #in the code to reflect the new class name (NodeDLL instead of Node).
+
+
+class NodeDLL:
+    def __init__(self, data=None):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.size = 0
+
+   def append(self, data):
+       node = NodeDLL(data)
+
+       if self.head == None:
+           self.head = node
+
+       else:
+           current = self.head
+           while current.next:
+               current = current.next
+           current.next = node
+           current.prev = current
+       self.size += 1
+
+
+   def __iter__(self):
+       current = self.head
+       while current:
+           val = current.data
+           current = current.next
+           yield val
+
+   def get_size(self):
+       return self.size
+
+   def clear(self):
+       self.head = None
+       self.size = 0
+       return
+
+   def get_data(self, data):
+       node = self.head
+       counter = 0
+       while node != None:
+           if node.data == data:
+               counter += 1
+           node = node.next
+       if counter > 1:
+           return data
+       else:
+           return False
+
+
+   def delete(self, data):
+       if self.head.data == data:
+           self.head = self.head.next
+           return
+       if self.tail.data == data:
+           self.tail = self.tail.previous
+       previous_data = self.head
+       current_data = self.head
+       while current_data:
+           if current_data.data == data:
+               previous_data.next = current_data.next
+               current_data.next.previous = previous_data
+               self.size -= 1
+               return
+           previous_data = current_data
+           current_data = current_data.next
+
+
+
+
+    '''Exercise Part 5 and 6:
+    Complete the classes below to implement a stack and queue data structure. You are free to use built-in
+    methods but you have to complete all methods below. Always return the correct data type according
+    to the exercise sheet'''
+
+class MyStack:
+    def __init__(self):
+        self.stack = deque()
+
+    def push(self, element):
+        return self.stack.append(element)
+
+    def pop(self):
+        if len(self.stack) <= 0:
+            return "The stack is empty"
+        return self.stack.pop()
+
+    def top(self):
+        if self.size() > 0:
+            return self.stack[len(self.stack) - 1]
+        else:
+            return "The stack is empty"
+
+    def size(self):
+        return len(self.stack)
+
+
+class MyQueue:
+    def __init__(self):
+        self.queue = deque()
+
+    def push(self,element):
+        return self.queue.append(element)
+
+    def pop(self):
+        if len(self.queue) <= 0:
+            return "The queue is empty"
+        return self.queue.pop()
+
+    def show_left(self):
+        return self.queue [0]
+
+    def show_right(self):
+        return self.queue [-1]
+
+    def size(self):
+        return len(self.queue)
+
+
+# For example
+import random
+
+# Create of list
+k = SinglyLinkedList()
+for i in range(10):
+    k.append(random.randint(1,10))
+
+print(f'List: {list(k)}')
+
+s = random.randint(1,10)
+print(f'Data: {s}')
+
+b = k.get_data(s)
+print(f'Return: {b}')
+
+#Clear all of list
+k.clear()
+print(f'Cleared list: {list(k)}')
